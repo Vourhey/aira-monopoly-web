@@ -62,9 +62,6 @@ export default {
       }
     }  
   },
-  created: function() {
-
-  },
   methods: {
     launchQRReader: function(event) {
       console.log(this.to_address)

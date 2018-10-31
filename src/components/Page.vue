@@ -63,7 +63,7 @@ export default {
     }
   },
   created: function() {
-    this.$mqtt.subscribe('game/player/joined')
+    this.$mqtt.subscribe('game/player/joined/' + this.gameId)
   },
   computed: {
     qrcodetext: function () {
@@ -71,7 +71,7 @@ export default {
     }
   },
   mqtt: {
-    'game/player/joined': function(data, topic) {
+    'game/player/joined/+': function(data, topic) {
       var player = new TextDecoder('utf-8').decode(data)
       this.players.push(player)
     }
