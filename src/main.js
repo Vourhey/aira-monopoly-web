@@ -1,11 +1,18 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+
 import VueQRCodeComponent from 'vue-qrcode-component'
 import VueQrcodeReader from 'vue-qrcode-reader'
+import VueMqtt from 'vue-mqtt';
+
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.component('qr-code', VueQRCodeComponent)
-Vue.use( VueQrcodeReader)
+Vue.use(VueQrcodeReader)
+Vue.use(VueMqtt, 'ws://mqtt.corp.aira.life')
+Vue.use(Vuetify)
 
 new Vue({
   el: '#app',

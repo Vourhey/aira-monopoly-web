@@ -1,13 +1,24 @@
 <template>
-  <div id="app">
-    <h1>{{ msg }}</h1>
-    <input id='user_name' type='text' v-model="nameFromInput" /> 
-    <br>
-    <button v-on:click="toProfile">
-        Next
-    </button>
-
-  </div>
+  <v-app>
+    <v-content>
+      <v-container fluid fill-height text-xs-center id="page">
+        <v-layout row wrap column>
+          <v-flex>
+            <h1>{{ msg }}</h1>
+          </v-flex>
+          <v-flex>
+            <v-text-field 
+              label="Your name" 
+              v-model="nameFromInput" 
+              @keyup.native.enter="toProfile" />
+            <v-btn v-on:click="toProfile">
+              Next
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -16,7 +27,7 @@ export default {
   props: ['gameId', 'playerId'],
   data () {
     return {
-      msg: 'Welcome to FillName component',
+      msg: 'Please fill your name',
       nameFromInput: ''
     }
   },
