@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Page from '../components/Page'
+import Vue      from 'vue'
+import Router   from 'vue-router'
+import Page     from '../components/Page'
 import FillName from '../components/FillName'
-import Profile from '../components/Profile'
+import Profile  from '../components/Profile'
 
 Vue.use(Router)
 
