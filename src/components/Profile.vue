@@ -152,6 +152,13 @@ export default {
       this.myBalance = myJson.balance
       this.msg = "Welcome " + this.nameOfUser
     })
+
+    this.$mqtt.subscribe('game/player/updatebalance/' + this.playerId)
+  },
+  mqtt: {
+    'game/player/updatebalance/+': function(data, topic) {
+      this.myBalance = new TextDecoder('utf-8').decode(data)
+    }
   },
   computed: {
     qrcodetext: function () {
@@ -176,11 +183,7 @@ export default {
 
       fetch('http://localhost:5000/game/send/'+ this.gameId + '/' + this.fromAddress + '/' + this.toAddress + '/' + this.amount)
       .then((data) => {
-        fetch('http://localhost:5000/game/balance/' + this.gameId + '/' + this.playerId)
-          .then((data) => data.json())
-          .then((myJson) => {
-            this.myBalance = myJson.balance
-          })
+        console.log(data)
       })
     },
     sendToBank: function(event) {

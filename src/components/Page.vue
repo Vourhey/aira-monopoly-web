@@ -8,7 +8,7 @@
           </v-flex>
           <v-flex align-center>
             <v-card>
-            <div>
+            <div v-if="!showGameQrCode && !scanGameQrCode">
               <v-btn v-on:click="createNewGame">
                 Create Game
               </v-btn>
@@ -34,7 +34,7 @@
               </div>
             </div>
             <div>
-              <v-btn v-on:click="joinGame" v-if="!showGameQrCode">
+              <v-btn v-on:click="joinGame" v-if="!showGameQrCode && !scanGameQrCode">
                 Join
               </v-btn>
               <div v-if="scanGameQrCode">
