@@ -79,7 +79,7 @@ export default {
   methods: {
     createNewGame: function(event) {
       console.log("Creating game...")
-      fetch("http://osticket.corp.aira.life/server/creategame")
+      fetch("https://osticket.corp.aira.life/server/creategame")
       .then((data) => data.json())
       .then((myJson) => {
         console.log(myJson.gameId)
@@ -98,7 +98,7 @@ export default {
       this.paused = true
       this.scanGameQrCode = false
 
-      fetch("http://osticket.corp.aira.life/server/game/join/" + decodedString)
+      fetch("https://osticket.corp.aira.life/server/game/join/" + decodedString)
       .then((data) => data.json()) 
       .then((player) => {
         this.$router.push({name: 'FillName', params: {gameId: decodedString, playerId: player.playerId}})

@@ -11,7 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueQrcodeReader)
-Vue.use(VueMqtt, 'ws://mqtt.corp.aira.life')
+Vue.use(VueMqtt, 'wss://mqtt.corp.aira.life:443')
 Vue.use(Vuetify)
 
 new Vue({

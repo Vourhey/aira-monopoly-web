@@ -77,7 +77,7 @@ export default {
     }  
   },
   created: function() {
-    fetch('http://osticket.corp.aira.life/server/game/balance/' + this.gameId + '/' + this.playerId)
+    fetch('https://osticket.corp.aira.life/server/game/balance/' + this.gameId + '/' + this.playerId)
     .then((data) => data.json())
     .then((myJson) => {
       this.myBalance = myJson.balance
