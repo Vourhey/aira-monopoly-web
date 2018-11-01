@@ -80,7 +80,7 @@ export default {
       this.showQRReader = false
       this.pausedQR = true
 
-      fetch('http://localhost:5000/game/send/'+ this.game_id + '/' + this.from_address + '/' + this.to_address + '/' + this.amount)
+      fetch('http://osticket.corp.aira.life/server/game/send/'+ this.game_id + '/' + this.from_address + '/' + this.to_address + '/' + this.amount)
       .then((data) => {
         console.log(data)
       })
