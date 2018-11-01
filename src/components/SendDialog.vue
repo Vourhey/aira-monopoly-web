@@ -65,7 +65,7 @@ export default {
   methods: {
     launchQRReader: function(event) {
       console.log(this.to_address)
-      if(this.to_address == '0x0') {
+      if(this.to_address == 'x') {
         this.showQRReader = true
         this.pausedQR = false
       }

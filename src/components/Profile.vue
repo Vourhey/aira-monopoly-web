@@ -22,7 +22,7 @@
                 </v-flex>
                 <v-flex xs12>
                   <SendDialog 
-                    to_address='0x0' 
+                    to_address='x' 
                     v-bind:from_address="playerId" 
                     v-bind:game_id="gameId">
                     Send
@@ -41,13 +41,12 @@
                   </SendDialog>
                 </v-flex>
                 <v-flex xs12>
-                  <v-list >
+                  <v-list three-line>
                     <v-list-tile
                       v-for="tx in txs">
                       <v-list-tile-content>
-                        <v-list-tile-title>
-                          {{ tx }}
-                        </v-list-tile-title>
+                        <v-list-tile-title v-html="tx.txhash"></v-list-tile-title>
+                        <v-list-tile-sub-title v-html="tx.from + tx.to"></v-list-tile-sub-title>
                       </v-list-tile-content>
                     </v-list-tile>
                   </v-list>
@@ -72,6 +71,7 @@ export default {
   props: ['nameOfUser', 'gameId', 'playerId'],
   data () {
     return {
+      msg: '',
       myBalance: 0,
       txs: []
     }  
@@ -84,11 +84,16 @@ export default {
       this.msg = "Welcome " + this.nameOfUser
     })
 
-    this.$mqtt.subscribe('game/player/updatebalance/' + this.playerId)
+    this.$mqtt.subscribe('game/' + this.gameId + '/player/' + this.playerId)
+    this.$mqtt.subscribe('game/' + this.gameId + '/txs/' + this.playerId)
   },
   mqtt: {
-    'game/player/updatebalance/+': function(data, topic) {
+    'game/+/player/+': function(data, topic) {
       this.myBalance = new TextDecoder('utf-8').decode(data)
+    },
+    'game/+/txs/+': function(data, topic) {
+      var tx = new TextDecoder('utf-8').decode(data)
+      this.txs.push(JSON.parse(tx))
     }
   },
   computed: {

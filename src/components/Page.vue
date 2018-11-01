@@ -63,7 +63,7 @@ export default {
     }
   },
   created: function() {
-    this.$mqtt.subscribe('game/player/joined/' + this.gameId)
+    // this.$mqtt.subscribe('game/' + this.gameId + '/player/joined')
   },
   computed: {
     qrcodetext: function () {
@@ -71,7 +71,7 @@ export default {
     }
   },
   mqtt: {
-    'game/player/joined/+': function(data, topic) {
+    'game/+/player/joined': function(data, topic) {
       var player = new TextDecoder('utf-8').decode(data)
       this.players.push(player)
     }
@@ -83,7 +83,9 @@ export default {
       .then((data) => data.json())
       .then((myJson) => {
         console.log(myJson.gameId)
+        this.$mqtt.subscribe('game/' + myJson.gameId + '/player/joined')
         this.gameId = myJson.gameId
+        this.players.push(myJson.playerId)
         this.showGameQrCode = true
       })
     },
