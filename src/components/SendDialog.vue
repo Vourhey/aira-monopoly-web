@@ -1,5 +1,5 @@
 <template>
-  <v-dialog 
+  <v-dialog
     v-model="aboutToSend"
     width="400">
     <v-btn
@@ -62,7 +62,7 @@ export default {
       rules: {
         amount: value => {return !isNaN(value)}
       }
-    }  
+    }
   },
   methods: {
     launchQRReader: function(event) {
@@ -81,6 +81,8 @@ export default {
       this.aboutToSend = false
       this.showQRReader = false
       this.pausedQR = true
+
+      this.$emit('asked')
 
       fetch(config.SERVER + 'game/send/'+ this.game_id + '/' + this.from_address + '/' + this.to_address + '/' + this.amount)
       .then((data) => {

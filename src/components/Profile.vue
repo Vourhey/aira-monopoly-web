@@ -21,21 +21,22 @@
                   </h2>
                 </v-flex>
                 <v-flex xs12>
-                  <SendDialog 
-                    to_address='x' 
-                    v-bind:from_address="playerId" 
+                  <SendDialog
+                    to_address='x'
+                    v-bind:from_address="playerId"
                     v-bind:game_id="gameId">
                     Send
                   </SendDialog>
-                  <SendDialog 
-                    v-bind:to_address="playerId" 
-                    from_address="0x0" 
-                    v-bind:game_id="gameId">
+                  <SendDialog
+                    v-bind:to_address="playerId"
+                    from_address="0x0"
+                    v-bind:game_id="gameId"
+                    v-on:asked="askedFromBank = true">
                     Get From Bank
                   </SendDialog>
-                  <SendDialog 
-                    to_address="0x0" 
-                    v-bind:from_address="playerId" 
+                  <SendDialog
+                    to_address="0x0"
+                    v-bind:from_address="playerId"
                     v-bind:game_id="gameId">
                     Send To Bank
                   </SendDialog>
@@ -46,7 +47,7 @@
                       v-for="tx in txs">
                       <v-list-tile-content>
                         <v-list-tile-title v-html="tx.txhash"></v-list-tile-title>
-                        <v-list-tile-sub-title v-html="tx.from + tx.to"></v-list-tile-sub-title>
+                        <v-list-tile-sub-title v-html="tx.value + ': ' + tx.from + ' -> ' + tx.to"></v-list-tile-sub-title>
                       </v-list-tile-content>
                     </v-list-tile>
                   </v-list>
@@ -76,7 +77,7 @@ export default {
       myBalance: 0,
       askedFromBank: false,
       txs: []
-    }  
+    }
   },
   created: function() {
     fetch(config.SERVER + 'game/balance/' + this.gameId + '/' + this.playerId)
@@ -86,12 +87,12 @@ export default {
       this.msg = "Welcome " + this.nameOfUser
     })
 
-    this.$mqtt.subscribe('game/' + this.gameId + '/player/' + this.playerId)
+    this.$mqtt.subscribe('game/' + this.gameId + '/balance/' + this.playerId)
     this.$mqtt.subscribe('game/' + this.gameId + '/txs/' + this.playerId)
     this.$mqtt.subscribe('game/' + this.gameId + '/player/getfrombank')
   },
   mqtt: {
-    'game/+/player/+': function(data, topic) {
+    'game/+/balance/+': function(data, topic) {
       this.myBalance = new TextDecoder('utf-8').decode(data)
     },
     'game/+/txs/+': function(data, topic) {
@@ -99,8 +100,11 @@ export default {
       this.txs.push(JSON.parse(tx))
     },
     'game/+/player/getfrombank': function(data, topic) {
-      console.log("Asking for an approve")
-      this.$mqtt.publish('game/' + this.gameId + '/player/approved', this.playerId)
+      if (!this.askedFromBank) {
+        console.log("Asking for an approve")
+        this.$mqtt.publish('game/' + this.gameId + '/player/approved', this.playerId)
+      }
+      this.askedFromBank = false
     }
   },
   computed: {
@@ -109,7 +113,7 @@ export default {
     }
   },
   methods: {
-    
+
   }
 }
 </script>
