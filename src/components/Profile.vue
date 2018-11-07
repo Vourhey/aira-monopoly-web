@@ -62,6 +62,7 @@
 
 <script>
 import SendDialog from './SendDialog'
+import * as config from '../config'
 
 export default {
   name: 'Profile',
@@ -73,11 +74,12 @@ export default {
     return {
       msg: '',
       myBalance: 0,
+      askedFromBank: false,
       txs: []
     }  
   },
   created: function() {
-    fetch('https://osticket.corp.aira.life/server/game/balance/' + this.gameId + '/' + this.playerId)
+    fetch(config.SERVER + 'game/balance/' + this.gameId + '/' + this.playerId)
     .then((data) => data.json())
     .then((myJson) => {
       this.myBalance = myJson.balance
@@ -86,6 +88,7 @@ export default {
 
     this.$mqtt.subscribe('game/' + this.gameId + '/player/' + this.playerId)
     this.$mqtt.subscribe('game/' + this.gameId + '/txs/' + this.playerId)
+    this.$mqtt.subscribe('game/' + this.gameId + '/player/getfrombank')
   },
   mqtt: {
     'game/+/player/+': function(data, topic) {
@@ -94,6 +97,10 @@ export default {
     'game/+/txs/+': function(data, topic) {
       var tx = new TextDecoder('utf-8').decode(data)
       this.txs.push(JSON.parse(tx))
+    },
+    'game/+/player/getfrombank': function(data, topic) {
+      console.log("Asking for an approve")
+      this.$mqtt.publish('game/' + this.gameId + '/player/approved', this.playerId)
     }
   },
   computed: {

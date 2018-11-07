@@ -48,6 +48,8 @@
 
 
 <script>
+import * as config from '../config'
+
 export default {
   name: 'SendDialog',
   props: ['to_address', 'from_address', 'game_id'],
@@ -64,7 +66,7 @@ export default {
   },
   methods: {
     launchQRReader: function(event) {
-      console.log(this.to_address)
+      // console.log(this.to_address)
       if(this.to_address == 'x') {
         this.showQRReader = true
         this.pausedQR = false
@@ -80,7 +82,7 @@ export default {
       this.showQRReader = false
       this.pausedQR = true
 
-      fetch('https://osticket.corp.aira.life/server/game/send/'+ this.game_id + '/' + this.from_address + '/' + this.to_address + '/' + this.amount)
+      fetch(config.SERVER + 'game/send/'+ this.game_id + '/' + this.from_address + '/' + this.to_address + '/' + this.amount)
       .then((data) => {
         console.log(data)
       })

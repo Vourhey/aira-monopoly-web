@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import * as config from '../config'
+
 export default {
   name: 'Page',
   data () {
@@ -79,7 +81,7 @@ export default {
   methods: {
     createNewGame: function(event) {
       console.log("Creating game...")
-      fetch("https://osticket.corp.aira.life/server/creategame")
+      fetch(config.SERVER + "creategame")
       .then((data) => data.json())
       .then((myJson) => {
         console.log(myJson.gameId)
@@ -98,7 +100,7 @@ export default {
       this.paused = true
       this.scanGameQrCode = false
 
-      fetch("https://osticket.corp.aira.life/server/game/join/" + decodedString)
+      fetch(config.SERVER + "game/join/" + decodedString)
       .then((data) => data.json()) 
       .then((player) => {
         this.$router.push({name: 'FillName', params: {gameId: decodedString, playerId: player.playerId}})
