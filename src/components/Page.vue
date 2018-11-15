@@ -25,7 +25,8 @@
               <div>
                 <v-list>
                   <v-list-tile
-                    v-for="n in players">
+                    v-for="n in players"
+                    :key="n">
                     <v-list-tile-content>
                       <v-list-tile-title  style="text-align: center;">{{n}}</v-list-tile-title>
                     </v-list-tile-content>
@@ -101,7 +102,7 @@ export default {
       this.scanGameQrCode = false
 
       fetch(config.SERVER + "game/join/" + decodedString)
-      .then((data) => data.json()) 
+      .then((data) => data.json())
       .then((player) => {
         this.$router.push({name: 'FillName', params: {gameId: decodedString, playerId: player.playerId}})
       })

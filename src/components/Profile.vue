@@ -40,11 +40,19 @@
                     v-bind:game_id="gameId">
                     Send To Bank
                   </SendDialog>
+                  <Approve
+                    v-bind:playerId="approveForPlayerId"
+                    v-bind:gameId="gameId"
+                    v-bind:amount="approveAmountXRT"
+                    v-bind:showApproveDialog="showApproveDialog"
+                    v-on:done="showApproveDialog = false"
+                  ></Approve>
                 </v-flex>
                 <v-flex xs12>
                   <v-list three-line>
                     <v-list-tile
-                      v-for="tx in txs">
+                      v-for="tx in txs"
+                      :key="tx.txhash">
                       <v-list-tile-content>
                         <v-list-tile-title v-html="tx.txhash"></v-list-tile-title>
                         <v-list-tile-sub-title v-html="tx.value + ': ' + tx.from + ' -> ' + tx.to"></v-list-tile-sub-title>
@@ -64,11 +72,13 @@
 <script>
 import SendDialog from './SendDialog'
 import * as config from '../config'
+import Approve from './Approve.vue'
 
 export default {
   name: 'Profile',
   components: {
-    SendDialog
+    SendDialog,
+    Approve
   },
   props: ['nameOfUser', 'gameId', 'playerId'],
   data () {
@@ -76,6 +86,9 @@ export default {
       msg: '',
       myBalance: 0,
       askedFromBank: false,
+      showApproveDialog: false,
+      approveForPlayerId: '',
+      approveAmountXRT: 0,
       txs: []
     }
   },
@@ -102,7 +115,11 @@ export default {
     'game/+/player/getfrombank': function(data, topic) {
       if (!this.askedFromBank) {
         console.log("Asking for an approve")
-        this.$mqtt.publish('game/' + this.gameId + '/player/approved', this.playerId)
+        var data = new TextDecoder('utf-8').decode(data)
+        var obj = JSON.parse(data)
+        this.approveForPlayerId = obj.playerId
+        this.approveAmountXRT = obj.amountXRT
+        this.showApproveDialog = true
       }
       this.askedFromBank = false
     }
